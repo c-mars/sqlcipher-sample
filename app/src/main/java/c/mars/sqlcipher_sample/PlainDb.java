@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -15,7 +14,7 @@ public class PlainDb extends CoreDb {
     private SQLiteDatabase db;
 
     public PlainDb(Context context) {
-        DbHelper dbHelper = new DbHelper(context);
+        PlainDbHelper dbHelper = new PlainDbHelper(context);
         db = dbHelper.getWritableDatabase();
     }
 
@@ -40,5 +39,13 @@ public class PlainDb extends CoreDb {
             notes.add(n);
         } while (c.moveToNext());
         return notes;
+    }
+
+    @Override
+    public int getCount() {
+        Cursor c = db.query(NotesTable.TABLE_NAME, new String[]{NotesTable.COLUMN_NAME_NOTE}, null, null, null, null, null);
+        int count = c.getCount();
+        c.close();
+        return count;
     }
 }

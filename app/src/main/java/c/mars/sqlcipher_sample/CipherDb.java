@@ -15,19 +15,13 @@ import java.util.ArrayList;
 public class CipherDb extends CoreDb {
 
     private SQLiteDatabase db;
-    public static final String DATABASE_NAME = "cipher.db";
     public static final String PASSWORD = "test123";
 
     public CipherDb(Context context) {
         SQLiteDatabase.loadLibs(context);
 
-        File databaseFile = context.getDatabasePath(DATABASE_NAME);
-        databaseFile.mkdirs();
-        databaseFile.delete();
-
-        db = SQLiteDatabase.openOrCreateDatabase(databaseFile, PASSWORD, null);
-        db.execSQL(NotesTable.SQL_CREATE_TABLE);
-//        db.execSQL("create table "+NotesTable.TABLE_NAME+"("+NotesTable.COLUMN_NAME_NOTE+")");
+        CipherDbHelper dbHelper = new CipherDbHelper(context);
+        db = dbHelper.getWritableDatabase(PASSWORD);
     }
 
     @Override
@@ -48,5 +42,13 @@ public class CipherDb extends CoreDb {
         } while (c.moveToNext());
         c.close();
         return notes;
+    }
+
+    @Override
+    public int getCount() {
+        Cursor c = db.query(NotesTable.TABLE_NAME, new String[]{NotesTable.COLUMN_NAME_NOTE}, null, null, null, null, null);
+        int count = c.getCount();
+        c.close();
+        return count;
     }
 }

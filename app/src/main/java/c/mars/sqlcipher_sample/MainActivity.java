@@ -48,7 +48,9 @@ public class MainActivity extends ActionBarActivity {
 
         db = new CipherDb(this);
 
-        db.initWithDefaults();
+        if (db.getCount()==0) {
+            db.initWithDefaults();
+        }
         ArrayList<String> notes = db.getAll();
         dataView.setText(notes.toString());
     }

@@ -23,6 +23,7 @@ public abstract class CoreDb {
 
     public abstract void insert(String note);
     public abstract ArrayList<String> getAll();
+    public abstract int getCount();
 
     public static abstract class NotesTable implements BaseColumns {
         public static final String TABLE_NAME = "notes_table";
